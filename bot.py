@@ -90,16 +90,8 @@ def check_jobs():
 
 # =========================
 
-while True:
+try:
+    check_jobs()
 
-    try:
-
-        check_jobs()
-
-        time.sleep(300)
-
-    except Exception as e:
-
-        print("Error:", e)
-
-        time.sleep(60)
+except Exception as e:
+    print("Error:", e)
