@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import time
 import os
+
 # =========================
 # Telegram Data
 # =========================
@@ -19,7 +19,18 @@ TOPIC = "haidy_jobs"
 
 URL = "https://freelanceyard.com/en/jobs"
 
-sent_jobs = set()
+FILE_NAME = "sent_jobs.txt"
+
+# =========================
+# Load sent jobs
+# =========================
+
+try:
+    with open(FILE_NAME, "r") as file:
+        sent_jobs = set(file.read().splitlines())
+
+except FileNotFoundError:
+    sent_jobs = set()
 
 # =========================
 # Telegram Function
@@ -35,7 +46,7 @@ def send_telegram(message):
     }
 
     requests.post(telegram_url, data=data)
-send_telegram("🔥 Telegram Test")
+
 # =========================
 # Phone Notification Function
 # =========================
@@ -46,7 +57,7 @@ def send_phone_notification(message):
         f"https://ntfy.sh/{TOPIC}",
         data=message.encode("utf-8")
     )
-send_phone_notification("🔥 Test Notification")
+
 # =========================
 # Check Jobs
 # =========================
@@ -72,6 +83,10 @@ def check_jobs():
 
                 sent_jobs.add(full_link)
 
+                # Save sent job
+                with open(FILE_NAME, "a") as file:
+                    file.write(full_link + "\n")
+
                 message = f"""
 🚀 New Job Posted!
 
@@ -80,10 +95,7 @@ def check_jobs():
 🔗 {full_link}
 """
 
-                # Send Telegram
                 send_telegram(message)
-
-                # Send Phone Notification
                 send_phone_notification(message)
 
                 print("New Job Sent:", title)
