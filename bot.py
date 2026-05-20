@@ -6,9 +6,10 @@ import os
 # Telegram Data
 # =========================
 
-BOT_TOKEN = os.getenv("8762856676:AAF5egGKU9crdsZcd_CzgWoeZcfEjlpjFL8")
-CHAT_ID = os.getenv("1196795944")
-
+# BOT_TOKEN = os.getenv("8762856676:AAF5egGKU9crdsZcd_CzgWoeZcfEjlpjFL8")
+# CHAT_ID = os.getenv("1196795944")
+BOT_TOKEN = "8762856676:AAF5egGKU9crdsZcd_CzgWoeZcfEjlpjFL8"
+CHAT_ID = "1196795944"
 # =========================
 # ntfy Notification
 # =========================
@@ -64,8 +65,11 @@ def send_phone_notification(message):
 
 def check_jobs():
 
-    response = requests.get(URL)
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
 
+    response = requests.get(URL, headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
 
     jobs = soup.find_all("a", href=True)
